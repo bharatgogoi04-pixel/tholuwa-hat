@@ -1,8 +1,6 @@
 
 name: Build Tholuwa Hat APK
 
-name: Build Tholuwa Hat APK
-
 on:
   workflow_dispatch:
   push:
@@ -27,49 +25,9 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Android packages
-        run: |
-          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --sdk_root="$ANDROID_HOME" "platform-tools" "platforms;android-35" "build-tools;35.0.0"
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: "8.9"
-
-      - name: Build APK
-        working-directory: Tholuwa_Hat_Android_Project/android
-        run: gradle :app:assembleDebug
-
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: Tholuwa-Hat-APK
-          path: Tholuwa_Hat_Android_Project/android/app/build/outputs/apk/debug/*.apk
-
-on:
-  workflow_dispatch:
-  push:
-    paths:
-      - "Tholuwa_Hat_Android_Project/**"
-      - ".github/workflows/android.yml"
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout project
-        uses: actions/checkout@v4
-
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: "17"
-
       - name: Install Android SDK packages
         run: |
-          yes | sdkmanager --licenses || true
+          yes | sdkmanager --licenses
           sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
 
       - name: Setup Gradle
@@ -81,7 +39,7 @@ jobs:
         working-directory: Tholuwa_Hat_Android_Project/android
         run: gradle :app:assembleDebug
 
-      - name: Save APK
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: Tholuwa-Hat-APK
